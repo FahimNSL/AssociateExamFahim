@@ -165,6 +165,17 @@
             background-color: #218838;
         }
 
+        .undoBtn,
+        .redoBtn {
+            background-color: rgb(114, 114, 245);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+    
         .btn:disabled {
             background-color: #c6c6c6;
             color: #666;
@@ -198,8 +209,45 @@
             background-color: #c82333;
         }
 
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #333;
+            color: white;
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            padding: 20px 0;
+            text-align: center; 
+        }
 
-        /* General Responsive Styles for All Screens */
+        .header h1 {
+            color: white;
+            margin: 0;
+            font-size: 2rem;
+            
+            
+        }
+
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 60px;
+            background-color: #333;
+            color: white;
+            text-align: center;
+            line-height: 60px;
+        }
+
+
         @media screen and (max-width: 1200px) {
             h1 {
                 font-size: 1.8rem;
@@ -323,9 +371,9 @@
 </head>
 
 <body>
-
-    <h1>Project Task Application</h1>
-
+    <header class="header" style="justify-content: center;">
+        <h1>Project Task Application</h1>
+    </header>
     <div class="task-form">
         <input type="text" id="taskInput" placeholder="Enter a new task">
         <button id="addTaskBtn">Add Task</button>
@@ -353,17 +401,19 @@
                 </tr>
             </thead>
             <tbody id="taskList">
-                
+
             </tbody>
         </table>
     </div>
     <div class="undo-redo" style="margin-top: 10px;">
-        <button id="undoBtn" class="btn">Undo</button>
-        <button id="redoBtn" class="btn">Redo</button>
+        <button id="undoBtn" class="undoBtn">Undo</button>
+        <button id="redoBtn" class="redoBtn">Redo</button>
     </div>
 
     <script src="app.js"></script>
-
+    <footer class="footer">
+        Md. Ehtesamul Haque Fahim
+    </footer>
 </body>
 
 </html>

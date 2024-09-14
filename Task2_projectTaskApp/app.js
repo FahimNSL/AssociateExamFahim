@@ -12,33 +12,56 @@ document.addEventListener('DOMContentLoaded', () => {
     let undoStack = [];
     let redoStack = [];
 
-
+    const toggleUndoRedoVisibility = (taskCount) => {
+        if (taskCount > 0) {
+            undoBtn.style.display = undoStack.length > 0 ? 'inline-block' : 'none';
+            redoBtn.style.display = redoStack.length > 0 ? 'inline-block' : 'none';
+        } else {
+            undoBtn.style.display = 'none';
+            redoBtn.style.display = 'none';
+        }
+    };
 
     const displayTasks = (filteredTasks = tasks) => {
-        taskList.innerHTML = '';
-        filteredTasks.forEach(task => {
-            const row = document.createElement('tr');
-            row.className = task.status === 'completed' ? 'task-completed' : '';
+        taskList.innerHTML = ''; 
+    
+        if (filteredTasks.length === 0) {
 
-            row.innerHTML = `
-                <td>${task.description}</td>
-                <td>${task.status}</td>
-                <td>${task.createdAt}</td>
-                <td>
-                    ${task.status === 'completed' ? `
-                        <button class="btn btn-complete" onclick="markCompleted(${task.id})" disabled>Complete</button>
-                        <button class="btn btn-delete" onclick="deleteTask(${task.id})">Delete</button>
-                        <button class="undo-icon" onclick="undoTask(${task.id})">Pending</button>
-                    ` : `
-                        <button class="btn btn-complete" onclick="markCompleted(${task.id})">Complete</button>
-                        <button class="btn btn-delete" onclick="deleteTask(${task.id})">Delete</button>
-                    `}
-                </td>
-            `;
-            taskList.appendChild(row);
-            
-        });
+            const noDataRow = document.createElement('tr');
+            const noDataCell = document.createElement('td');
+            noDataCell.colSpan = 4; 
+            noDataCell.style.textAlign = 'center'; 
+            noDataCell.textContent = 'No data to preview'; 
+            noDataRow.appendChild(noDataCell);
+            taskList.appendChild(noDataRow);
+        } else {
+           
+            filteredTasks.forEach(task => {
+                const row = document.createElement('tr');
+                row.className = task.status === 'completed' ? 'task-completed' : '';
+    
+                row.innerHTML = `
+                    <td>${task.description}</td>
+                    <td>${task.status}</td>
+                    <td>${task.createdAt}</td>
+                    <td>
+                        ${task.status === 'completed' ? `
+                            <button class="btn btn-complete" onclick="markCompleted(${task.id})" disabled>Complete</button>
+                            <button class="btn btn-delete" onclick="deleteTask(${task.id})">Delete</button>
+                            <button class="undo-icon" onclick="undoTask(${task.id})">Pending</button>
+                        ` : `
+                            <button class="btn btn-complete" onclick="markCompleted(${task.id})">Complete</button>
+                            <button class="btn btn-delete" onclick="deleteTask(${task.id})">Delete</button>
+                        `}
+                    </td>
+                `;
+                taskList.appendChild(row);
+            });
+        }
+
+        toggleUndoRedoVisibility(filteredTasks.length);
     };
+    
 
 
     addTaskBtn.addEventListener('click', () => {
@@ -53,14 +76,13 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         tasks.push(task);
-        saveTasks()
+        saveTasks();
         undoStack.push({ action: 'add', task });
         redoStack = [];
         displayTasks();
 
         taskInput.value = '';
     });
-
 
     window.markCompleted = (id) => {
         const task = tasks.find(task => task.id === id);
@@ -69,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
             saveTasks();
             undoStack.push({ action: 'complete', task });
             redoStack = [];
-            displayTasks(); 
+            displayTasks();
         }
     };
 
@@ -77,33 +99,29 @@ document.addEventListener('DOMContentLoaded', () => {
         const task = tasks.find(task => task.id === id);
         if (task) {
             tasks = tasks.filter(task => task.id !== id);
-            saveTasks(); 
+            saveTasks();
             undoStack.push({ action: 'delete', task });
-            redoStack = []; 
-            displayTasks(); 
+            redoStack = [];
+            displayTasks();
         }
     };
 
     window.undoTask = (id) => {
         const task = tasks.find(task => task.id === id);
         if (task) {
-            task.status = 'pending'; 
-            saveTasks(); 
+            task.status = 'pending';
+            saveTasks();
             undoStack.push({ action: 'edit', task });
             redoStack = [];
-            displayTasks(); 
+            displayTasks();
         }
     };
- 
-
 
     undoBtn.addEventListener('click', () => {
         if (undoStack.length === 0) return;
 
         const lastAction = undoStack.pop();
         redoStack.push(lastAction);
-        console.log({redoStack});
-        
 
         switch (lastAction.action) {
             case 'add':
@@ -122,8 +140,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
         }
 
-        saveTasks(); 
-        displayTasks(); 
+        saveTasks();
+        displayTasks();
     });
 
     redoBtn.addEventListener('click', () => {
@@ -144,26 +162,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 tasks = tasks.filter(task => task.id !== lastUndo.task.id);
                 break;
             case 'edit':
-                lastUndo.task.status = 'pending'; 
+                lastUndo.task.status = 'pending';
                 tasks = tasks.map(task => task.id === lastUndo.task.id ? lastUndo.task : task);
                 break;
         }
 
-        saveTasks(); 
-        displayTasks(); 
+        saveTasks();
+        displayTasks();
     });
 
     const saveTasks = () => {
         localStorage.setItem('tasks', JSON.stringify(tasks));
     };
 
-
     filterSelect.addEventListener('change', () => {
         const status = filterSelect.value;
         const filteredTasks = status === 'all' ? tasks : tasks.filter(task => task.status === status);
         displayTasks(filteredTasks);
     });
-
 
     filterBtn.addEventListener('click', () => {
         const selectedDate = filterDate.value;
