@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        .task-form {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .task-form input[type="text"] {
+            flex: 1 1 60%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .task-form button {
+            flex: 1 1 35%;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .task-form button:hover {
+            background-color: #0056b3;
+        }
+
+        .filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+            justify-content: space-between;
+        }
+
+        .filter select,
+        .filter input {
+            flex: 1 1 48%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .filter button {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .filter button:hover {
+            background-color: #218838;
+        }
+
+        .task-table {
+            width: 100%;
+            max-width: 100%;
+            border-collapse: collapse;
+            overflow-x: auto;
+        }
+
+        .task-table-container {
+            max-height: 350px;
+
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            margin: 50px auto;
+            width: 70%;
+            overflow-x: auto;
+        }
+
+        .task-table th,
+        .task-table td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+            word-wrap: break-word;
+        }
+
+        .task-table th {
+            background-color: #007bff;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .task-table td {
+            background-color: #fff;
+            font-size: 0.9rem;
+        }
+
+        .task-completed td {
+            background-color: #d4edda;
+            text-decoration: line-through;
+            color: #155724;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:disabled {
+            background-color: #c6c6c6;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+
+        .btn-complete {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-complete:hover {
+            background-color: #218838;
+        }
+
+        .btn:disabled {
+            background-color: #c6c6c6;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .btn:disabled:hover {
+            background-color: #696d6d;
+            color: #666;
+
+        }
+
+        .undo-icon {
+            cursor: pointer;
+            color: #007bff;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+
+        .undo-icon:hover {
+            color: #0056b3;
+
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+
+
+        /* General Responsive Styles for All Screens */
+        @media screen and (max-width: 1200px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .task-form input[type="text"],
+            .task-form button {
+                font-size: 0.9rem;
+            }
+
+            .task-table th,
+            .task-table td {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+
+            .btn {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media screen and (max-width: 992px) {
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            .task-form input[type="text"],
+            .task-form button {
+                font-size: 0.85rem;
+            }
+
+            .task-table th,
+            .task-table td {
+                font-size: 0.85rem;
+            }
+
+            .btn {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+
+            .task-form,
+            .filter {
+                flex-direction: column;
+            }
+
+            .task-form input[type="text"],
+            .task-form button,
+            .filter select,
+            .filter input,
+            .filter button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            h1 {
+                font-size: 1.4rem;
+            }
+
+            .task-table th,
+            .task-table td {
+                font-size: 0.8rem;
+            }
+
+            .btn {
+                font-size: 0.75rem;
+            }
+
+            .undo-redo {
+                margin: 20px 0;
+                text-align: center;
+            }
+
+            .undo-redo .btn {
+                margin: 0 10px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            h1 {
+                font-size: 1.2rem;
+            }
+
+            .task-form input[type="text"],
+            .task-form button {
+                font-size: 0.75rem;
+            }
+
+            .task-table th,
+            .task-table td {
+                font-size: 0.75rem;
+            }
+
+            .btn {
+                font-size: 0.7rem;
+            }
+        }
+
+        @media screen and (max-width: 320px) {
+            h1 {
+                font-size: 1rem;
+            }
+
+            .task-form input[type="text"],
+            .task-form button {
+                font-size: 0.65rem;
+            }
+
+            .task-table th,
+            .task-table td {
+                font-size: 0.65rem;
+            }
+
+            .btn {
+                font-size: 0.6rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Project Task Application</h1>
+
+    <div class="task-form">
+        <input type="text" id="taskInput" placeholder="Enter a new task">
+        <button id="addTaskBtn">Add Task</button>
+    </div>
+
+    <div class="filter">
+        <label for="filter">Filter Tasks: </label>
+        <select id="filter">
+            <option value="all">All</option>
+            <option value="completed">Completed</option>
+            <option value="pending">Pending</option>
+        </select>
+
+        <input type="date" id="filterDate">
+        <button id="filterBtn">Filter by Date</button>
+    </div>
+    <div class="task-table-container">
+        <table class="task-table">
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Status</th>
+                    <th>Creation Time</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="taskList">
+                
+            </tbody>
+        </table>
+    </div>
+    <div class="undo-redo" style="margin-top: 10px;">
+        <button id="undoBtn" class="btn">Undo</button>
+        <button id="redoBtn" class="btn">Redo</button>
+    </div>
+
+    <script src="app.js"></script>
+
+</body>
+
+</html>
