@@ -1,4 +1,5 @@
 function stairClimbing(n) {
+   
     if (n === 1) return 1;
     if (n === 2) return 2;
 
@@ -12,7 +13,6 @@ function stairClimbing(n) {
         prev1 = current;
     }
     // console.log({current});
-
     return current;
 }
 
