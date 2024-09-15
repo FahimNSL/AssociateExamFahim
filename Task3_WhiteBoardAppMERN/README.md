@@ -1,8 +1,8 @@
 ### Step 1: Download or Clone the Repository
 
-    -Download the files or clone the project from the repository 
+Download the files or clone the project from the repository 
 
-    https://github.com/FahimNSL/AssociateExamFahim.git
+https://github.com/FahimNSL/AssociateExamFahim.git
 
 ### Step 2: Extract File and Open in VS Code 
 
