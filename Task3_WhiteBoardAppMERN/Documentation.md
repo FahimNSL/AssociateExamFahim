@@ -30,3 +30,15 @@ Simply go to the Termnial and do below commands
 
 - npm start
 
+
+
+
+### Admin Credentials
+
+username: fahim1
+password: 123456
+
+### User Credentials
+
+username: nsl1
+password: 123456
